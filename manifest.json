@@ -1,1 +1,11 @@
-{"name":"Farm Monitor OSI","short_name":"Farm OSI","start_url":"./index.html","display":"standalone","background_color":"#f4f7fa","theme_color":"#16324f","lang":"pl"}
+{
+  "name":"Farm Monitor OSI",
+  "short_name":"Farm OSI",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f4f7fa",
+  "theme_color":"#16324f",
+  "lang":"pl",
+  "description":"Monitoring ferm, cykli, raportów dziennych i leczeń."
+}

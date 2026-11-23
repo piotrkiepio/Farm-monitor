@@ -1,18 +1,55 @@
-<!doctype html><html lang="pl"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#16324f"><title>Farm Monitor OSI</title>
-<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css">
-</head><body>
-<header><div><h1>Farm Monitor OSI</h1><small id="mode">Tryb lokalny</small></div><button id="logout">Wyloguj</button></header>
-<div id="login" class="screen"><div class="loginbox"><h2>Farm Monitor OSI</h2>
-<p>Zaloguj się do centralnej bazy lub użyj trybu demo.</p>
-<input id="email" type="email" placeholder="E-mail"><input id="password" type="password" placeholder="Hasło">
-<button id="loginBtn">Zaloguj</button><button id="demoBtn">Uruchom demo lokalne</button><div id="loginMsg"></div></div></div>
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16324f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Farm Monitor OSI</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div><h1>Farm Monitor OSI</h1><small id="mode">Tryb lokalny</small></div>
+  <button id="logout">Wyloguj</button>
+</header>
+
+<div id="login" class="screen">
+  <div class="loginbox">
+    <h2>Farm Monitor OSI</h2>
+    <p>Zaloguj się do centralnej bazy lub użyj trybu demo.</p>
+    <input id="email" type="email" placeholder="E-mail">
+    <input id="password" type="password" placeholder="Hasło">
+    <button id="loginBtn">Zaloguj</button>
+    <button id="demoBtn">Uruchom demo lokalne</button>
+    <div id="loginMsg"></div>
+  </div>
+</div>
+
 <div id="app" class="hidden">
-<nav><button data-page="dashboard">Dashboard</button><button data-page="daily">Raport dzienny</button><button data-page="farms">Fermy</button><button data-page="treatments">Leczenia</button><button data-page="osi">Raport OSI</button><button data-page="backup">Dane</button></nav>
+<nav>
+  <button data-page="dashboard">Dashboard</button>
+  <button data-page="daily">Raport dzienny</button>
+  <button data-page="farms">Fermy</button>
+  <button data-page="treatments">Leczenia</button>
+  <button data-page="osi">Raport OSI</button>
+  <button data-page="backup">Dane</button>
+</nav>
 <main>
-<section id="dashboard" class="page"><h2>Dashboard</h2><div id="cards" class="cards"></div><div class="panel"><h3>Alerty</h3><div id="alerts"></div></div><div class="panel"><h3>Ostatnie wpisy</h3><div id="recent"></div></div></section>
-<section id="daily" class="page hidden"><h2>Raport dzienny</h2><div class="panel"><form id="dailyForm" class="grid">
+
+<section id="dashboard" class="page">
+<h2>Dashboard</h2>
+<div id="cards" class="cards"></div>
+<div class="panel"><h3>Alerty</h3><div id="alerts"></div></div>
+<div class="panel"><h3>Ostatnie wpisy</h3><div id="recent"></div></div>
+</section>
+
+<section id="daily" class="page hidden">
+<h2>Raport dzienny</h2>
+<div class="panel">
+<form id="dailyForm" class="grid">
 <select id="farm"></select><select id="house"></select><select id="cycle"></select>
 <input id="date" type="date"><input id="age" type="number" min="1" placeholder="Dzień życia">
 <input id="mort" type="number" min="0" placeholder="Padnięcia [szt.]">
@@ -20,15 +57,111 @@
 <input id="lam" type="number" min="0" placeholder="Kulawizny [szt.]">
 <input id="water" type="number" min="0" step=".01" placeholder="Woda [l]">
 <input id="weight" type="number" min="0" step=".001" placeholder="Śr. masa [kg]">
-<input id="note" placeholder="Uwagi"><button>Zapisz</button></form></div><div id="dailyList"></div></section>
-<section id="farms" class="page hidden"><h2>Fermy</h2><div id="farmList"></div></section>
-<section id="treatments" class="page hidden"><h2>Leczenia / antybiotyki</h2><div class="panel"><form id="txForm" class="grid">
+<input id="note" placeholder="Uwagi">
+<button>Zapisz raport dzienny</button>
+</form>
+</div>
+<div id="dailyList"></div>
+</section>
+
+<section id="farms" class="page hidden">
+<h2>Fermy i kurniki</h2>
+
+<div class="panel">
+<h3>Dodaj fermę</h3>
+<form id="farmForm" class="grid">
+<input id="farmName" required placeholder="Nazwa fermy / hodowcy">
+<input id="farmCode" placeholder="Kod gospodarstwa / McD">
+<input id="farmFarmer" placeholder="Hodowca">
+<input id="farmAddress" placeholder="Adres / miejscowość">
+<button>Dodaj fermę</button>
+</form>
+</div>
+
+<div class="panel">
+<h3>Dodaj kurnik</h3>
+<form id="houseForm" class="grid">
+<select id="houseFarm" required></select>
+<input id="houseName" required placeholder="Numer / kod kurnika, np. K1">
+<input id="houseArea" required type="number" min="1" step=".01" placeholder="Powierzchnia [m²]">
+<input id="houseSection" type="number" min="1" placeholder="Section count">
+<button>Dodaj kurnik</button>
+</form>
+</div>
+
+<div class="panel">
+<h3>Dodaj cykl</h3>
+<form id="cycleForm" class="grid">
+<select id="cycleFarm" required></select>
+<select id="cycleHouse" required></select>
+<input id="cycleName" required placeholder="Nazwa / numer cyklu, np. Cykl 27">
+<input id="placementDate" required type="date" placeholder="Data wstawienia">
+<input id="inserted" required type="number" min="1" placeholder="Liczba wstawionych [szt.]">
+<input id="hatchery" placeholder="Wylęgarnia">
+<input id="standard" placeholder="Standard / program">
+<input id="delivered" type="number" min="0" placeholder="Liczba zdanych [szt.]">
+<input id="deliveryWeight" type="number" min="0" step=".001" placeholder="Śr. masa przy zdaniu [kg]">
+<button>Dodaj cykl</button>
+</form>
+</div>
+
+<div id="farmList"></div>
+</section>
+
+<section id="treatments" class="page hidden">
+<h2>Leczenia / antybiotyki</h2>
+<div class="panel">
+<form id="txForm" class="grid">
 <select id="txFarm"></select><select id="txHouse"></select><select id="txCycle"></select>
-<input id="txStart" type="date"><input id="txEnd" type="date"><select id="drug"><option value="">Wybierz antybiotyk / preparat...</option><optgroup label="Preparaty stosowane w gospodarstwie"><option>Metaxol</option><option>Floron</option><option>Lincospectin</option><option>Lincoral-S</option><option>Suramox</option></optgroup><optgroup label="Pozostałe substancje przeciwbakteryjne"><option>Amoksycylina</option><option>Ampicylina</option><option>Doksacyklina</option><option>Florfenikol</option><option>Linkomycyna</option><option>Spektynomycyna</option><option>Tiamulina</option><option>Tylozyna</option><option>Kolistyna</option><option>Sulfadimetoksyna</option><option>Sulfachloropirydazyna</option><option>Sulfametoksazol + trimetoprim</option><option>Enrofloksacyna</option><option>Inny antybiotyk</option></optgroup></select><input id="drugCustom" placeholder="Jeśli wybrano „Inny antybiotyk” — wpisz nazwę">
-<input id="qty" type="number" min="0" step=".001" placeholder="Ilość"><input id="unit" placeholder="Jednostka">
-<input id="reason" placeholder="Powód"><input id="withdrawal" type="date" placeholder="Koniec karencji">
-<input id="txNote" placeholder="Uwagi"><button>Zapisz leczenie</button></form></div><div id="txList"></div></section>
-<section id="osi" class="page hidden"><h2>Raport OSI</h2><div class="panel grid"><select id="osiFarm"></select><select id="osiHouse"></select><select id="osiCycle"></select><button id="osiBtn">Przelicz</button><button id="csvBtn">CSV</button></div><div id="osiResult"></div></section>
-<section id="backup" class="page hidden"><h2>Dane</h2><div class="panel"><button id="exportBtn">Eksport kopii JSON</button><input id="restore" type="file" accept=".json"><button id="clearBtn" class="danger">Usuń dane lokalne</button></div></section>
-</main></div>
-<script src="config.js"></script><script src="app.js"></script></body></html>
+<input id="txStart" type="date"><input id="txEnd" type="date">
+<select id="drug">
+<option value="">Wybierz antybiotyk / preparat...</option>
+<optgroup label="Preparaty stosowane w gospodarstwie">
+<option>Metaxol</option><option>Floron</option><option>Lincospectin</option>
+<option>Lincoral-S</option><option>Suramox</option><option>Surasol</option>
+</optgroup>
+<optgroup label="Pozostałe">
+<option>Amoksycylina</option><option>Ampicylina</option><option>Doksacyklina</option>
+<option>Florfenikol</option><option>Linkomycyna</option><option>Spektynomycyna</option>
+<option>Tiamulina</option><option>Tylozyna</option><option>Kolistyna</option>
+<option>Sulfadimetoksyna</option><option>Sulfachloropirydazyna</option>
+<option>Enrofloksacyna</option><option>Inny preparat</option>
+</optgroup>
+</select>
+<input id="drugCustom" placeholder="Jeśli wybrano „Inny preparat” — wpisz nazwę">
+<input id="qty" type="number" min="0" step=".001" placeholder="Ilość">
+<input id="unit" placeholder="Jednostka">
+<input id="reason" placeholder="Powód leczenia">
+<input id="withdrawal" type="date" placeholder="Koniec karencji">
+<input id="txNote" placeholder="Uwagi">
+<button>Zapisz leczenie</button>
+</form>
+</div>
+<div id="txList"></div>
+</section>
+
+<section id="osi" class="page hidden">
+<h2>Raport OSI</h2>
+<div class="panel grid">
+<select id="osiFarm"></select><select id="osiHouse"></select><select id="osiCycle"></select>
+<button id="osiBtn">Przelicz</button><button id="csvBtn">CSV</button>
+</div>
+<div id="osiResult"></div>
+</section>
+
+<section id="backup" class="page hidden">
+<h2>Dane</h2>
+<div class="panel">
+<button id="exportBtn">Eksport kopii JSON</button>
+<input id="restore" type="file" accept=".json">
+<button id="clearBtn" class="danger">Usuń dane lokalne</button>
+</div>
+</section>
+
+</main>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
